@@ -1,0 +1,147 @@
+#!/bin/bash
+
+BLD=0
+CLR=0
+REC=0
+INS=0
+PACK=0
+PREFIX=""
+ALL=1
+SPI=0
+EER=0
+EXT=0
+GPX=0
+CPU=4
+
+HELP="Arguments must be:\n\n   Information parameters:
+\t-help           : This information
+
+   Commands:
+\t-clear          : Clear packages
+\t-reconf         : Reconfigure packages
+\t-build          : Build packages
+\t-install [path] : Install path (Default: \$SSM_DEV/workspace)
+\t-package        : Create distribution packages
+
+   Default builds all packages, to only build specific packages:
+\t-ext            : Build external dependencies
+\t-eer            : Build libeerUtils
+\t-spi            : Build SPI
+\t-gpx            : Build GenPhysX
+
+\t-cpu            : Number of cpus to sue for build (Default: ${CPU})\n"
+
+#----- Get arguments.
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -clear)   CLR=1;;
+        -reconf)  REC=1;;
+        -build)   BLD=1;;
+        -pack)    PACK=1;;
+        -install) INS=1;PREFIX=$2;shift;;
+
+        -ext)     ALL=0; EXT=1;;
+        -eer)     ALL=0; EER=1;;
+        -spi)     ALL=0; SPI=1;;
+        -gpx)     ALL=0; GPX=1;;
+        -cpu)     CPU=$2;shift;;
+
+        -h|-help)    printf -- "$HELP\n"; exit 0;;
+        --)          shift; break;;
+        *)           printf -- "Invalid argument $1.\n\n$HELP"; exit 1;;
+    esac
+    shift
+done
+
+SRC=`readlink -f $(dirname "${BASH_SOURCE[0]}")`
+export SSM_DEV=${SSM_DEV:-${SRC}}
+PREFIX=`readlink -f ${PREFIX:-${SSM_DEV}/workspace}`
+
+if [[ $CLR -eq 1 ]]; then
+   printf -- "\n----- Cleaning -----\n"
+   rm -f -r ${SSM_DEV}/build/
+   REC=1;
+fi
+
+if [[ $BLD -eq 1 ]]; then
+  
+   #----- System with no OpenGL
+#   ldconfig -p | grep -q 'libGL\.so' || { export OpenGL_ROOT=$LIB_PATH/GL }
+
+   printf -- "\n----- Building packages in : ${SSM_DEV}/build  -----\n"
+   if [[ $ALL -eq 1 || $EXT -eq 1 ]];then
+      mkdir -p ${SSM_DEV}/build/SPI-External
+      cd ${SSM_DEV}/build/SPI-External
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI-External
+      make || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+
+      #-----Copy constant files to src trunk for synchronization
+      if [[ -n $CMCCONST ]]; then
+         cp -fr ${CMCCONST}/table_[bd]_bufr{,_[ef]} ${CMCCONST}/opdict/* ${SRC}/SPI/libSPI/share/rmn
+      fi
+   fi
+
+   if [[ $ALL -eq 1 || $EER -eq 1 ]];then
+      mkdir ${SSM_DEV}/build/eerUtils
+      cd ${SSM_DEV}/build/eerUtils
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/eerUtils
+      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make install
+   fi
+ 
+   if [[ $ALL -eq 1 || $SPI -eq 1 ]];then
+      mkdir -p $SSM_DEV/build/libSPI
+      cd $SSM_DEV/build/libSPI
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI/libSPI
+      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make install
+
+      mkdir ${SSM_DEV}/build/SPI
+      cd ${SSM_DEV}/build/SPI
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI/SPI
+      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make install
+   fi
+
+   if [[ $ALL -eq 1 || $GPX -eq 1 ]];then
+      mkdir ${SSM_DEV}/build/GenPhysX
+      cd ${SSM_DEV}/build/GenPhysX
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/GenPhysX
+      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make install 
+   fi
+
+   if [[ $INS -eq 1 ]]; then
+ 
+      lib=`ls -1d ${PREFIX}/libSPI*`
+      spi=`ls -1d ${PREFIX}/SPI*`
+      gpx=`ls -1d ${PREFIX}/GenPhysX*`
+
+      printf -- "
+   Add theses variables to your environment:
+      sh/ksh/bash shell:
+         export GDB_PATH=\[path where you uncompress DBGeo.tgz\]/data
+         export SPI_LIB=${lib}
+         export SPI_PATH=${spi}
+         export PATH=${spi}/bin:${gpx}/bin:\$PATH
+         
+      csh shell:
+         setenv GDB_PATH \[path where you uncompress DBGeo.tgz\]/data
+         setenv SPI_LIB ${lib}
+         setenv SPI_PATH ${spi}
+         setenv PATH ${spi}/bin:${gpx}/bin:\$PATH
+      
+   and launch SPI with the command \"SPI\"\n"
+   fi
+fi
+
+if [[ $PACK -eq 1 ]]; then
+   
+   printf -- "\n----- Creating packages in : ${SSM_DEV}/package  -----\n"
+
+   mkdir -p ${SSM_DEV}/package
+   [[ $ALL -eq 1 || $EER -eq 1 ]] && (cd ${SSM_DEV}/build/eerUtils && make package && mv package/eerUtils_*.tar.gz ${SSM_DEV}/package)
+   [[ $ALL -eq 1 || $SPI -eq 1 ]] && (cd ${SSM_DEV}/build/SPI && make package && mv package/SPI_*.tar.gz ${SSM_DEV}/package)
+   [[ $ALL -eq 1 || $SPI -eq 1 ]] && (cd ${SSM_DEV}/build/libSPI && make package && mv package/libSPI_*.tar.gz ${SSM_DEV}/package)
+   [[ $ALL -eq 1 || $GPX -eq 1 ]] && (cd ${SSM_DEV}/build/GenPhysX && make package && mv package/GenPhysX_*.tar.gz ${SSM_DEV}/package)
+fi
