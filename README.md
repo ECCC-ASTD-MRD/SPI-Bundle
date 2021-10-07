@@ -47,8 +47,16 @@ External dependencies (GDAL,URP,ECCODES,LIBECBUFR,...). Within the ECCC/SCIENCE 
 export CMD_EXT_PATH=/fs/ssm/eccc/cmd/cmds/ext/20210211; . ssmuse-sh -x $CMD_EXT_PATH
 ```
 
+# Geographical base map database ([GDB](https://eer.cmc.ec.gc.ca/software/SPI/DBGeo/DBGeo.tgz))
+The geographical database (GDB), contains the base map geographical data used by SPI and takes up to 13GB of space
+Download and decompress it into it's final installation directory if it has'nt been installed before.
+Define the GDB_PATH variable to the location of the geographical database for SPI to use it:
+```shell
+export GDB_PATH=[GDB extract path]/data
+```
+
 # Environment setup
-The build process requires the definition of a variable indicating where the build will occur otherwise the loal path will be used
+The build process requires the definition of a variable indicating where the build will occur otherwise the current path will be used
 ```shell
 export SSM_DEV=[where to build]
 ```
