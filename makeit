@@ -53,7 +53,13 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-SRC=`readlink -f $(dirname "${BASH_SOURCE[0]}")`
+#----- Bypasss submodules for dev setup
+if [[ -d ${SSM_SRC} ]]; then
+   SRC=${SSM_SRC}
+else 
+   SRC=`readlink -f $(dirname "${BASH_SOURCE[0]}")`
+fi
+
 export SSM_DEV=${SSM_DEV:-${SRC}}
 PREFIX=`readlink -f ${PREFIX:-${SSM_DEV}/workspace}`
 
