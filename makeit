@@ -13,6 +13,8 @@ EXT=0
 GPX=0
 CPU=4
 
+unset VRB
+
 HELP="Arguments must be:\n\n   Information parameters:
 \t-help           : This information
 
@@ -46,6 +48,7 @@ while [ $# -gt 0 ]; do
         -gpx)     ALL=0; GPX=1;;
         -cpu)     CPU=$2;shift;;
 
+        -v|-verbose) VRB=1;;
         -h|-help)    printf -- "$HELP\n"; exit 0;;
         --)          shift; break;;
         *)           printf -- "Invalid argument $1.\n\n$HELP"; exit 1;;
@@ -79,10 +82,11 @@ if [[ $BLD -eq 1 ]]; then
       mkdir -p ${SSM_DEV}/build/SPI-External
       cd ${SSM_DEV}/build/SPI-External
       [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI-External
-      make || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
 
       #-----Copy constant files to src trunk for synchronization
       if [[ -n $CMCCONST ]]; then
+         mkdir -p ${SRC}/SPI/libSPI/share/rmn
          cp -fr ${CMCCONST}/table_[bd]_bufr{,_[ef]} ${CMCCONST}/opdict/* ${SRC}/SPI/libSPI/share/rmn
       fi
    fi
@@ -91,7 +95,7 @@ if [[ $BLD -eq 1 ]]; then
       mkdir ${SSM_DEV}/build/eerUtils
       cd ${SSM_DEV}/build/eerUtils
       [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/eerUtils
-      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install
    fi
  
@@ -99,21 +103,21 @@ if [[ $BLD -eq 1 ]]; then
       mkdir -p $SSM_DEV/build/libSPI
       cd $SSM_DEV/build/libSPI
       [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI/libSPI
-      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install
 
       mkdir ${SSM_DEV}/build/SPI
       cd ${SSM_DEV}/build/SPI
       [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI/SPI
-      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      make || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install
    fi
 
    if [[ $ALL -eq 1 || $GPX -eq 1 ]];then
       mkdir ${SSM_DEV}/build/GenPhysX
       cd ${SSM_DEV}/build/GenPhysX
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/GenPhysX
-      make -j ${CPU} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DTCL_ROOT=${PREFIX}/TCL ${SRC}/GenPhysX
+      make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install 
    fi
 

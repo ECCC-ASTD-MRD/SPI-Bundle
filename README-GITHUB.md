@@ -19,7 +19,7 @@ This will provide you with the source for the following dependent packages
 # Building SPI
 You will need cmake with a version at least 3.12
 
-# Optional dependencies
+## Optional dependencies
 
 * [librmn](https://github.com/ECCC-ASTD-MRD/librmn)
 * [vgrid](https://github.com/ECCC-ASTD-MRD/vgrid)
@@ -29,7 +29,7 @@ You will need cmake with a version at least 3.12
 * [fltlib](https://sourceforge.net/projects/fltlib)
 
 
-# Geographical base map database ([GDB](https://eer.cmc.ec.gc.ca/software/SPI/DBGeo/DBGeo.tgz))
+## Geographical base map database ([GDB](https://eer.cmc.ec.gc.ca/software/SPI/DBGeo/DBGeo.tgz))
 The geographical database (GDB), contains the base map geographical data used by SPI and takes up to 13GB of space
 Download and decompress it into it's final installation directory if it has'nt been installed before.
 Define the GDB_PATH variable to the location of the geographical database for SPI to use it:
@@ -37,19 +37,19 @@ Define the GDB_PATH variable to the location of the geographical database for SP
 export GDB_PATH=[GDB extract path]/data
 ```
 
-# Environment setup
+## Environment setup
 The build process requires the definition of a variable indicating where the build will occur otherwise the current path will be used
 ```shell
 export SSM_DEV=[where to build]
 ```
 
-# Launching the build
+## Launching the build
 ```shell
 cd SPI-Bundle
 ./makeit -build -reconf
 ```
 
-# Installing packages
+## Installing packages
 ```shell
 makeit -install [install path]
 ```
