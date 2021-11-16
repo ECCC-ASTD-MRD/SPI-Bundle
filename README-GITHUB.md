@@ -17,7 +17,11 @@ This will provide you with the source for the following dependent packages
 * [GenPhysX](https://github.com/ECCC-ASTD-MRD/GenPhysX)
 
 # Building SPI
-You will need cmake with a version at least 3.12
+*You will need cmake with a version at least 3.12
+* [Mako](https://pypi.org/project/Mako) is needed to build Mesa3D
+```shell
+pip install Mako
+```
 
 ## Optional dependencies
 
