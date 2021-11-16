@@ -121,10 +121,10 @@ if [[ $BLD -eq 1 ]]; then
 
    if [[ $INS -eq 1 ]]; then
  
-      lib=`ls -1d ${PREFIX}/libSPI*`
-      spi=`ls -1d ${PREFIX}/SPI*`
-      gpx=`ls -1d ${PREFIX}/GenPhysX*`
-
+      lst=($(ls -1rd ${PREFIX}/libSPI_*)); lib=${lst[0]}
+      lst=($(ls -1rd ${PREFIX}/SPI_*));    spi=${lst[0]}
+      lst=($(ls -1rd ${PREFIX}/GenPhysX_*)); gpx=${lst[0]}
+ 
       printf -- "
    Add theses variables to your environment:
       sh/ksh/bash shell:
