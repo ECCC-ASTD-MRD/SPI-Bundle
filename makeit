@@ -57,13 +57,11 @@ while [ $# -gt 0 ]; do
 done
 
 #----- Bypasss submodules for dev setup
-if [[ -d ${SSM_SRC} ]]; then
-   SRC=${SSM_SRC}
-else 
-   SRC=`readlink -f $(dirname "${BASH_SOURCE[0]}")`
+if [[ ! -d ${SSM_SRC} ]]; then
+   export SSM_SRC=`readlink -f $(dirname "${BASH_SOURCE[0]}")`
 fi
 
-export SSM_DEV=${SSM_DEV:-${SRC}}
+export SSM_DEV=${SSM_DEV:-${SSM_SRC}}
 PREFIX=`readlink -f ${PREFIX:-${SSM_DEV}/workspace}`
 
 if [[ $CLR -eq 1 ]]; then
@@ -81,20 +79,20 @@ if [[ $BLD -eq 1 ]]; then
    if [[ $ALL -eq 1 || $EXT -eq 1 ]];then
       mkdir -p ${SSM_DEV}/build/SPI-External
       cd ${SSM_DEV}/build/SPI-External
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI-External
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/SPI-External
       make ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
 
       #-----Copy constant files to src trunk for synchronization
       if [[ -n $CMCCONST ]]; then
-         mkdir -p ${SRC}/SPI/libSPI/share/rmn
-         cp -fr ${CMCCONST}/table_[bd]_bufr{,_[ef]} ${CMCCONST}/opdict/* ${SRC}/SPI/libSPI/share/rmn
+         mkdir -p ${SSM_SRC}/SPI/libSPI/share/rmn
+         cp -fr ${CMCCONST}/table_[bd]_bufr{,_[ef]} ${CMCCONST}/opdict/* ${SSM_SRC}/SPI/libSPI/share/rmn
       fi
    fi
 
    if [[ $ALL -eq 1 || $EER -eq 1 ]];then
       mkdir ${SSM_DEV}/build/eerUtils
       cd ${SSM_DEV}/build/eerUtils
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/eerUtils
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/eerUtils
       make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install
    fi
@@ -102,13 +100,13 @@ if [[ $BLD -eq 1 ]]; then
    if [[ $ALL -eq 1 || $SPI -eq 1 ]];then
       mkdir -p $SSM_DEV/build/libSPI
       cd $SSM_DEV/build/libSPI
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI/libSPI
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/SPI/libSPI
       make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install
 
       mkdir ${SSM_DEV}/build/SPI
       cd ${SSM_DEV}/build/SPI
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SRC}/SPI/SPI
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/SPI/SPI
       make || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install
    fi
@@ -116,7 +114,7 @@ if [[ $BLD -eq 1 ]]; then
    if [[ $ALL -eq 1 || $GPX -eq 1 ]];then
       mkdir ${SSM_DEV}/build/GenPhysX
       cd ${SSM_DEV}/build/GenPhysX
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DTCL_ROOT=${PREFIX}/TCL ${SRC}/GenPhysX
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DTCL_ROOT=${PREFIX}/TCL ${SSM_SRC}/GenPhysX
       make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install 
    fi
