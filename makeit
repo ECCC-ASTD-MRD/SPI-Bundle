@@ -92,7 +92,7 @@ if [[ $BLD -eq 1 ]]; then
    if [[ $ALL -eq 1 || $EER -eq 1 ]];then
       mkdir ${SSM_DEV}/build/eerUtils
       cd ${SSM_DEV}/build/eerUtils
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/eerUtils
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DTCL_SRC_DIR=${SSM_SRC}/SPI-External/tcl ${SSM_SRC}/eerUtils
       make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install
    fi
