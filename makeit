@@ -70,7 +70,7 @@ if [[ $CLR -eq 1 ]]; then
    REC=1;
 fi
 
-if [[ $BLD -eq 1 ]]; then
+if [[ ($BLD -eq 1) || ($INS -eq 1) ]]; then
   
    #----- System with no OpenGL
 #   ldconfig -p | grep -q 'libGL\.so' || { export OpenGL_ROOT=$LIB_PATH/GL }
@@ -114,7 +114,7 @@ if [[ $BLD -eq 1 ]]; then
    if [[ $ALL -eq 1 || $GPX -eq 1 ]];then
       mkdir ${SSM_DEV}/build/GenPhysX
       cd ${SSM_DEV}/build/GenPhysX
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DTCL_ROOT=${PREFIX}/TCL ${SSM_SRC}/GenPhysX
+      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/GenPhysX
       make -j ${CPU} ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
       make install 
    fi

@@ -19,6 +19,8 @@ This will provide you with the source for the following dependent packages
 # Building SPI
 * You will need cmake with a version at least 3.12
 * [bison](https://www.gnu.org/software/bison) version 3.0+
+* [openssl](https://www.openssl.org/) version 1.1.1+
+* [GDAL](https://gdal.org)
 * [Mako](https://pypi.org/project/Mako) is needed to build Mesa3D
 ```shell
 pip install Mako
@@ -28,7 +30,6 @@ pip install Mako
 
 * [librmn](https://github.com/ECCC-ASTD-MRD/librmn)
 * [vgrid](https://github.com/ECCC-ASTD-MRD/vgrid)
-* [GDAL](https://gdal.org)
 * [eccodes](https://confluence.ecmwf.int/display/ECC)
 * [libecbufr](https://github.com/ECCC-MSC/libecbufr)
 * [fltlib](https://sourceforge.net/projects/fltlib)
