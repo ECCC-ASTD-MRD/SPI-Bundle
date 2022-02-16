@@ -23,7 +23,7 @@ HELP="Arguments must be:\n\n   Information parameters:
 \t-reconf         : Reconfigure packages
 \t-build          : Build packages
 \t-install [path] : Install path (Default: \$SSM_DEV/workspace)
-\t-package        : Create distribution packages
+\t-pack           : Create distribution packages
 
    Default builds all packages, to only build specific packages:
 \t-ext            : Build external dependencies
