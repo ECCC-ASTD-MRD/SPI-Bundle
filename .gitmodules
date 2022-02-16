@@ -9,7 +9,7 @@
 [submodule "SPI"]
 	path = SPI
 	url = https://gitlab.science.gc.ca/ECCC_CMOE_APPS/eerspi
-	branch = dev_jp
+	branch = dev
 [submodule "SPI-Externa"]
 	path = SPI-External
 	url = https://gitlab.science.gc.ca/ECCC_CMOE_APPS/SPI-External
