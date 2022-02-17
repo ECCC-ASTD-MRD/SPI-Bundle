@@ -148,8 +148,8 @@ if [[ $PACK -eq 1 ]]; then
    printf -- "\n----- Creating packages in : ${SSM_DEV}/package  -----\n"
 
    mkdir -p ${SSM_DEV}/package
-   [[ $ALL -eq 1 || $EER -eq 1 ]] && (cd ${SSM_DEV}/build/eerUtils && make package && mv package/eerUtils_*.tar.gz ${SSM_DEV}/package)
-   [[ $ALL -eq 1 || $SPI -eq 1 ]] && (cd ${SSM_DEV}/build/SPI && make package && mv package/SPI_*.tar.gz ${SSM_DEV}/package)
-   [[ $ALL -eq 1 || $SPI -eq 1 ]] && (cd ${SSM_DEV}/build/libSPI && make package && mv package/libSPI_*.tar.gz ${SSM_DEV}/package)
-   [[ $ALL -eq 1 || $GPX -eq 1 ]] && (cd ${SSM_DEV}/build/GenPhysX && make package && mv package/GenPhysX_*.tar.gz ${SSM_DEV}/package)
+   [[ $ALL -eq 1 || $EER -eq 1 ]] && (cd ${SSM_DEV}/build/eerUtils && make package && pack=$(basename `ls -1 package/eerUtils_*.tar.gz`) && mv package/${pack} ${SSM_DEV}/package/${pack%.tar.gz}.ssm)
+   [[ $ALL -eq 1 || $SPI -eq 1 ]] && (cd ${SSM_DEV}/build/SPI      && make package && pack=$(basename `ls -1 package/SPI_*.tar.gz`)      && mv package/${pack} ${SSM_DEV}/package/${pack%.tar.gz}.ssm)
+   [[ $ALL -eq 1 || $SPI -eq 1 ]] && (cd ${SSM_DEV}/build/libSPI   && make package && pack=$(basename `ls -1 package/libSPI_*.tar.gz`)   && mv package/${pack} ${SSM_DEV}/package/${pack%.tar.gz}.ssm)
+   [[ $ALL -eq 1 || $GPX -eq 1 ]] && (cd ${SSM_DEV}/build/GenPhysX && make package && pack=$(basename `ls -1 package/GenPhysX_*.tar.gz`) && mv package/${pack} ${SSM_DEV}/package/${pack%.tar.gz}.ssm)
 fi
