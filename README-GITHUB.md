@@ -52,10 +52,5 @@ export SSM_DEV=[where to build]
 ## Launching the build
 ```shell
 cd SPI-Bundle
-./makeit -build -reconf
-```
-
-## Installing packages
-```shell
-makeit -install [install path]
+makeit -build -reconf -install [install path]
 ```

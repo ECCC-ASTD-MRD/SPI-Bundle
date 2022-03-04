@@ -72,7 +72,7 @@ cd SPI-Bundle
 ./makeit -build -reconf
 ```
 
-## Installing packages
+## building packages
 ```shell
-makeit -install [install path] -pack
+makeit -pack
 ```
