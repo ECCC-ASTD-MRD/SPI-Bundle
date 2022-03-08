@@ -12,6 +12,7 @@ EER=0
 EXT=0
 GPX=0
 CPU=4
+GL=1
 
 unset VRB
 
@@ -30,6 +31,7 @@ HELP="Arguments must be:\n\n   Information parameters:
 \t-eer            : Build libeerUtils
 \t-spi            : Build SPI
 \t-gpx            : Build GenPhysX
+\t-nogl           : Do not build Mesa OpenGL (used for batch and forcing software rendering)
 
 \t-cpu            : Number of cpus to sue for build (Default: ${CPU})\n"
 
@@ -47,6 +49,7 @@ while [ $# -gt 0 ]; do
         -spi)     ALL=0; SPI=1;;
         -gpx)     ALL=0; GPX=1;;
         -cpu)     CPU=$2;shift;;
+        -nogl)    GL=0;;
 
         -v|-verbose) VRB=1;;
         -h|-help)    printf -- "$HELP\n"; exit 0;;
@@ -79,7 +82,7 @@ if [[ ($BLD -eq 1) || ($INS -eq 1) ]]; then
    if [[ $ALL -eq 1 || $EXT -eq 1 ]];then
       mkdir -p ${SSM_DEV}/build/SPI-External
       cd ${SSM_DEV}/build/SPI-External
-      [[ $REC -eq 1 ]] && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/SPI-External
+      [[ $REC -eq 1 ]] && cmake -DBUILD_MESAGL=${GL} -DCMAKE_INSTALL_PREFIX=${PREFIX} ${SSM_SRC}/SPI-External
       make ${VRB:+VERBOSE=$VRB} || { err=$?; printf "\n(ERROR) code: $err"; exit $err; }
 
       #-----Copy constant files to src trunk for synchronization
