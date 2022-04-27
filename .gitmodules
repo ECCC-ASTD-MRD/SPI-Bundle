@@ -1,15 +1,15 @@
 [submodule "GenPhysX"]
 	path = GenPhysX
 	url = ../genphysx
-	branch = feat_rmn-20
+	branch = dev
 [submodule "eerUtils"]
 	path = eerUtils
 	url = ../libeerutils
-	branch = feat_rmn-20
+	branch = dev
 [submodule "SPI"]
 	path = SPI
 	url = ../eerspi
-	branch = feat_rmn-20
+	branch = dev
 [submodule "SPI-Externa"]
 	path = SPI-External
 	url = ../SPI-External
