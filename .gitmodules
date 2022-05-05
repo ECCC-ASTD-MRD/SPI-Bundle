@@ -1,15 +1,12 @@
 [submodule "GenPhysX"]
 	path = GenPhysX
-	url = https://gitlab.science.gc.ca/ECCC_CMOE_APPS/genphysx
-	branch = feat_rmn-20
+	url = ../genphysx
 [submodule "eerUtils"]
 	path = eerUtils
-	url = https://gitlab.science.gc.ca/ECCC_CMOE_APPS/libeerutils
-	branch = feat_rmn-20
+	url = ../libeerutils
 [submodule "SPI"]
 	path = SPI
-	url = https://gitlab.science.gc.ca/ECCC_CMOE_APPS/eerspi
-	branch = feat_rmn-20
+	url = ../eerspi
 [submodule "SPI-Externa"]
 	path = SPI-External
-	url = https://gitlab.science.gc.ca/ECCC_CMOE_APPS/SPI-External
+	url = ../SPI-External
