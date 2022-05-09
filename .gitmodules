@@ -5,8 +5,7 @@
 	path = eerUtils
 	url = ../libeerutils
 [submodule "SPI"]
-	path = SPI
-	url = ../eerspi
+	path = ../SPI
 [submodule "SPI-Externa"]
 	path = SPI-External
 	url = ../SPI-External
