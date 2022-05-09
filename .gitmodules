@@ -7,6 +7,6 @@
 [submodule "SPI"]
 	path = SPI
 	url = ../SPI
-[[submodule "SPI-Externa"]
+[submodule "SPI-Externa"]
 	path = SPI-External
 	url = ../SPI-External
