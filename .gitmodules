@@ -8,7 +8,7 @@
 	branch = feat_rmn-20
 [submodule "SPI"]
 	path = SPI
-	url = ../eerspi
+	url = ../SPI
 	branch = feat_rmn-20
 [submodule "SPI-Externa"]
 	path = SPI-External
