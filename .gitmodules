@@ -8,7 +8,7 @@
 	branch = dev
 [submodule "SPI"]
 	path = SPI
-	url = ../eerspi
+	url = ../SPI
 	branch = dev
 [submodule "SPI-Externa"]
 	path = SPI-External
