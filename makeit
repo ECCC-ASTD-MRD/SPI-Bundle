@@ -88,7 +88,7 @@ if [[ ($BLD -eq 1) || ($INS -eq 1) ]]; then
       #-----Copy constant files to src trunk for synchronization
       if [[ -n $CMCCONST ]]; then
          mkdir -p ${SSM_SRC}/SPI/libSPI/share/rmn
-         cp -fr ${CMCCONST}/bufr_table_versions/tab_* ${CMCCONST}/opdict/* ${SSM_SRC}/SPI/libSPI/share/rmn
+         cp -fr ${CMCCONST}/bufr_table_versions/tab* ${CMCCONST}/opdict/* ${SSM_SRC}/SPI/libSPI/share/rmn
       fi
    fi
 
