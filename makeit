@@ -69,7 +69,8 @@ PREFIX=`readlink -f ${PREFIX:-${SSM_DEV}/workspace}`
 
 if [[ $CLR -eq 1 ]]; then
    printf -- "\n----- Cleaning -----\n"
-   rm -f -r ${SSM_DEV}/build/
+   rm -f -r ${SSM_DEV}/build/ ${SSM_DEV}/SPI-Bundle/SPI-External/tcl8.6.6/unix/pkgs
+   cd SPI-External; git clean --force; cd ..
    REC=1;
 fi
 
@@ -88,7 +89,7 @@ if [[ ($BLD -eq 1) || ($INS -eq 1) ]]; then
       #-----Copy constant files to src trunk for synchronization
       if [[ -n $CMCCONST ]]; then
          mkdir -p ${SSM_SRC}/SPI/libSPI/share/rmn
-         cp -fr ${CMCCONST}/bufr_table_versions/tab* ${CMCCONST}/opdict/* ${SSM_SRC}/SPI/libSPI/share/rmn
+         cp -fr ${CMCCONST}/table_[bd]_bufr{,_[ef]} ${CMCCONST}/opdict/* ${SSM_SRC}/SPI/libSPI/share/rmn
       fi
    fi
 
