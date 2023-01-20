@@ -5,11 +5,11 @@
 [submodule "eerUtils"]
 	path = eerUtils
 	url = ../libeerutils
-	branch = dev
+	branch = feat_rmn20
 [submodule "SPI"]
 	path = SPI
 	url = ../SPI
-	branch = dev
+	branch = feat_rmn20
 [submodule "SPI-Externa"]
 	path = SPI-External
 	url = ../SPI-External
