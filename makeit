@@ -70,7 +70,7 @@ PREFIX=`readlink -f ${PREFIX:-${SSM_DEV}/workspace}`
 if [[ $CLR -eq 1 ]]; then
    printf -- "\n----- Cleaning -----\n"
    rm -f -r ${SSM_DEV}/build/ ${SSM_DEV}/SPI-Bundle/SPI-External/tcl8.6.6/unix/pkgs
-   cd SPI-External; git clean --force; cd ..
+   cd SPI-External; git clean -d --force; cd ..
    REC=1;
 fi
 
